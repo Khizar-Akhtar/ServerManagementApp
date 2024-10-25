@@ -1,0 +1,43 @@
+@using BlazorDevelopment.Models
+@using Microsoft.AspNetCore.Components.Forms
+@inject NavigationManager navigation
+
+@if (Server !=null)
+{
+
+        <li @key="Server.ServerId">
+             @Server.Name in @Server.City is 
+             <span style ="color:@((Server.IsOnline?"green" :"red"))" >   
+                 @(Server.IsOnline?"online":"offline")
+                 &nbsp;
+             <a href="/Servers/@Server.ServerId" class="btn btn-link">Edit</a>
+             &nbsp;
+             <EditForm 
+                 Model="Server"
+                 FormName="@($"form-Server-{Server.ServerId}")"
+                 OnValidSubmit="@(() => { DeleteServer(Server.ServerId); })">
+                    <button type="submit" class="btn btn-link">Delete</button>
+            </EditForm>
+        </span>
+     </li>
+
+}
+
+
+@code {
+
+    [Parameter]
+    public Server? Server { get; set; }
+
+        private void DeleteServer(int serverId)
+    {
+        if (serverId > 0)
+        {
+             ServersRepository.DeleteServer(serverId);            
+             navigation.NavigateTo("/servers");
+             StateHasChanged();   
+        }
+    }
+} 
+ 
+

@@ -1,0 +1,68 @@
+@page "/todolist"
+@using Syncfusion.Blazor.Buttons
+@rendermode InteractiveServer
+
+<h3>To Do</h3>
+<br>
+
+<SfButton Content="Add Task" @onclick="AddTask" ></SfButton>
+<br/>
+<br/>
+
+@if (items !=null && items.Count > 0)
+{
+ <ul class="list-unstyled"> 
+  @foreach(var items in items)
+  {
+    <li @key="items.Id">
+      <div class="row mb-2"> 
+        <div class="col-1" style="width:30px">
+          <input type="checkbox"
+              style="vertical-align: middle;"
+              class="form-check-input"
+             @bind-value="items.IsCompleted"
+             checked="@items.IsCompleted" />
+         </div>
+
+         <div class="col">
+          @if(items.IsCompleted)
+          {
+
+            <input type="text" class="form-control border-0 text-decoration-line-through"style="vertical-align: middle;"  @bind-value="items.Name" />  
+          }
+
+          else 
+          {
+              <input type="text" class="form-control border-0"style="vertical-align: middle;"  @bind-value="items.Name" />  
+          }
+          
+         </div>
+        <div class="col">
+          @if (items.IsCompleted)
+          {
+            <text>Completed at : @items.DateCompleted.ToLongTimeString()</text>
+
+          }
+        </div>
+  
+
+      </div>
+       
+    </li>
+  }
+ </ul>
+
+}
+
+
+@code
+{
+  private List<ToDoItem> items=ToDoItemsRepository.GetItems();
+  private void AddTask ()
+  {
+     ToDoItemsRepository.AddItem(new ToDoItem {Name="New Task"});
+    items=ToDoItemsRepository.GetItems();
+  }
+
+}
+

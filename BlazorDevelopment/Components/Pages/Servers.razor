@@ -1,0 +1,44 @@
+@page "/servers"
+@rendermode InteractiveServer
+@inject NavigationManager navigation
+<h3>Server</h3>
+<br/>
+<br/>
+
+<CityListComponent SelectCityCallback="HandleCitySelection"/>
+
+<div class="input-group mb-3" >
+    <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="button-addon2" onchange="@HandleServerFilterChange">
+    <button class="btn btn-outline-secondary" type="button" id="button-addon2" >Search</button>
+</div> 
+    
+<ServerListComponent @rendermode="InteractiveServer" 
+  CityName="@selectedCity" />
+
+<p>
+    <a href="/servers/add" class="btn btn-primary">Add Server</a>
+</p>
+
+
+
+
+
+@code{
+
+private string selectedCity="Toronto";
+private List<string> cities  =CitiesRepository.GetCities();
+
+private string? searchFilter;
+    private void HandleServerFilterChange(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+
+    {   searchFilter=args.Value?.ToString()??string.Empty;
+        //this.servers = ServersRepository.SearchServers(searchFilter);
+        StateHasChanged();
+    }
+
+    private void HandleCitySelection(string cityName)
+    {
+        this.selectedCity = cityName;
+    }
+    
+}    

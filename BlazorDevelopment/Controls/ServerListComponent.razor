@@ -1,0 +1,28 @@
+@using BlazorDevelopment.Models
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+
+
+@if(servers !=null && servers.Count>0)
+
+ { <p> Server</p>
+
+<ul>  
+    @foreach (var server in servers)
+    {
+      <BlazorDevelopment.Controls.ServerComponent Server="server" />
+    }
+</ul>
+ } 
+
+@code {
+
+[Parameter]
+public string? CityName { get; set; }
+ private List<Server>? servers; 
+ protected override void OnInitialized()
+{ 
+    servers = ServersRepository.GetServersByCity(CityName ?? "Toronto");
+}    
+
+} 
